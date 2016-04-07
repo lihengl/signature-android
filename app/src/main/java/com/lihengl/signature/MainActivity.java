@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -17,15 +19,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Sensor uncalibratedGyroscope;
     private Sensor rotation;
 
-    private boolean allSensorsAvailable() {
-        if (uncalibratedGyroscope == null) { return false; }
-        if (accelerometer == null) { return false; }
-        if (gyroscope == null) { return false; }
-        if (rotation == null) { return false; }
-        if (gravity == null) { return false; }
-        return true;
-    }
-
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         Log.d("AccuracyChanged", sensor.toString());
@@ -33,29 +26,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            Log.d("Acceleration X", String.valueOf(event.values[0]));
-            Log.d("Acceleration Y", String.valueOf(event.values[1]));
-            Log.d("Acceleration Z", String.valueOf(event.values[2]));
-        } else if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE_UNCALIBRATED) {
-            Log.d("Raw rate of rotation X", String.valueOf(event.values[0]));
-            Log.d("Raw rate of rotation Y", String.valueOf(event.values[1]));
-            Log.d("Raw rate of rotation Z", String.valueOf(event.values[2]));
-        } else if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-            Log.d("Rate of rotation X", String.valueOf(event.values[0]));
-            Log.d("Rate of rotation Y", String.valueOf(event.values[1]));
-            Log.d("Rate of rotation Z", String.valueOf(event.values[2]));
-        } else if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
-            Log.d("Rotation X", String.valueOf(event.values[0]));
-            Log.d("Rotation Y", String.valueOf(event.values[1]));
-            Log.d("Rotation Z", String.valueOf(event.values[2]));
-            Log.d("Rotation S", String.valueOf(event.values[3]));
-        } else if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
-            Log.d("Gravity X", String.valueOf(event.values[0]));
-            Log.d("Gravity Y", String.valueOf(event.values[1]));
-            Log.d("Gravity Z", String.valueOf(event.values[2]));
-        } else {
-            Log.d("Unknown Sensor", event.sensor.getName());
+        switch (event.sensor.getType()) {
+            case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
+                Log.i("SENSOR-GRU", Arrays.toString(event.values));
+                break;
+            case Sensor.TYPE_ROTATION_VECTOR:
+                Log.i("SENSOR-ROT", Arrays.toString(event.values));
+                break;
+            case Sensor.TYPE_ACCELEROMETER:
+                Log.i("SENSOR-ACL", Arrays.toString(event.values));
+                break;
+            case Sensor.TYPE_GYROSCOPE:
+                Log.i("SENSOR-GRS", Arrays.toString(event.values));
+                break;
+            case Sensor.TYPE_GRAVITY:
+                Log.i("SENSOR-GVT", Arrays.toString(event.values));
+                break;
+            default:
+                Log.w("SENSOR-UKN", Arrays.toString(event.values));
         }
     }
 
@@ -87,12 +75,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         rotation = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         gravity = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-
-        if (!allSensorsAvailable()) {
-            Log.e("Incapable", "Required sensor unavailable");
-        } else {
-            Log.d("Created", "Hello!");
-        }
-
     }
 }
