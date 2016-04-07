@@ -46,10 +46,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, gravity, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(this, gravity, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_UI);
     }
 
     @Override
