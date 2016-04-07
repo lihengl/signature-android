@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Sensor accelerometer;
     private Sensor gravity;
     private Sensor gyroscope;
-    private Sensor uncalibratedGyroscope;
     private Sensor rotation;
 
     @Override
@@ -27,9 +26,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         switch (event.sensor.getType()) {
-            case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
-                Log.i("SENSOR-GRU", Arrays.toString(event.values));
-                break;
             case Sensor.TYPE_ROTATION_VECTOR:
                 Log.i("SENSOR-ROT", Arrays.toString(event.values));
                 break;
@@ -50,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, uncalibratedGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, gravity, SensorManager.SENSOR_DELAY_NORMAL);
@@ -70,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        uncalibratedGyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         rotation = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
